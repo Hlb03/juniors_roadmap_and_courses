@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UdemyCoursesClient{
 
     @GetMapping(value = "courses/{courseId}", produces = "application/json")
-    DetailedCourseInfo getCertainCourseInfo(@PathVariable String courseId, @RequestParam("fields[course]") String requiredFields);
+    DetailedCourseInfo getCertainCourseInfo(@PathVariable(name = "courseId") String courseId, @RequestParam("fields[course]") String requiredFields);
 
     // TODO: parse JSON response properly
     @GetMapping(value = "pricing")
@@ -32,7 +32,7 @@ public interface UdemyCoursesClient{
     //TODO: figure out data amount for one page
     @GetMapping(value = "courses?search={areaName}", produces = "application/json")
     BunchOfCoursesRequest getSpecifiedAreaCourses(
-            @PathVariable String areaName,
+            @PathVariable(name = "areaName") String areaName,
             @RequestHeader("Authorization") String authorizationToken,
             @RequestParam("fields[course]") String requiredFields
             );
