@@ -2,30 +2,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
-    </parent>
+    <!--    <parent>-->
+    <!--        <groupId>org.springframework.boot</groupId>-->
+    <!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+    <!--        <version>3.1.5</version>-->
+    <!--    </parent>-->
+
     <groupId>com.course_info</groupId>
-    <artifactId>udemy_courses_info</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>udemy_courses_info</name>
-    <description>udemy_courses_info</description>
+    <artifactId>from-start-to-success</artifactId>
+    <version>v1.0</version>
+    <name>from-start-to-success</name>
+    <description>roadmaps with course information with UdemyAPI usage</description>
+    <packaging>jar</packaging>
+
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring.boot.dependency.version>3.1.5</spring.boot.dependency.version>
+        <jakson.databind>2.16.0</jakson.databind>
+        <lombok.dep>1.18.30</lombok.dep>
     </properties>
     <dependencies>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>3.0.6</version>
+            <version>${spring.boot.dependency.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.dependency.version}</version>
         </dependency>
 
         <dependency>
@@ -37,6 +45,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${jakson.databind}</version>
         </dependency>
 
         <dependency>
@@ -48,12 +57,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.dep}</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.dependency.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -63,6 +74,24 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.dependency.version}</version>
+                <configuration>
+                    <mainClass>com.course_info.udemy_courses_info.UdemyCoursesInfoApplication</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.dependency.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>
