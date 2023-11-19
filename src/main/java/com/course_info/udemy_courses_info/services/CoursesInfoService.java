@@ -1,10 +1,16 @@
 package com.course_info.udemy_courses_info.services;
 
-import com.course_info.udemy_courses_info.entity.Course;
+import com.course_info.udemy_courses_info.entity.*;
+
+import java.util.List;
 
 public interface CoursesInfoService {
 
-    Course courseInfo(String courseId);
+    DetailedCourseInfo courseInfo(String courseId);
 
-    String getHotPropositions();
+    GeneralDiscountCourseInfo getCourseDiscountedPrice(String courseIds);
+
+    List<Course> getHotPropositions();
+
+    BunchOfCoursesRequest getCoursesForCertainArea(String areaName);
 }
