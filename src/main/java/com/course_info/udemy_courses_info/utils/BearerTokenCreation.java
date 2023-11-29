@@ -1,15 +1,11 @@
 package com.course_info.udemy_courses_info.utils;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
 @Component
-//@ConfigurationProperties(prefix = "udemy-api.client")
-//@PropertySource("classpath:application.properties")
 public class BearerTokenCreation {
 
     @Value("${udemy-api.client.id}")
