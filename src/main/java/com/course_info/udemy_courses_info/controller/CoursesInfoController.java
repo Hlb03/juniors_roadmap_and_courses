@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("localhost:3000")
 @Tag(name = "Various course info", description = "FS2S implementation that provides certain information about Udemy courses")
 @RestController
 @RequestMapping("/roadmaps/courses-info")
@@ -26,7 +27,6 @@ public class CoursesInfoController {
     @Operation(
             summary = "Course information by id ID",
             description = "Obtain full information about certain course by providing its identifier"
-
     )
     @GetMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +37,7 @@ public class CoursesInfoController {
     }
 
     @Operation(
-            summary = "NOT IMPLEMENTED YET!",
+            summary = "Get price with discount by course ID",
             description = "Returns both discounted and regular course price"
     )
     @GetMapping("/{courseId}/discount")
