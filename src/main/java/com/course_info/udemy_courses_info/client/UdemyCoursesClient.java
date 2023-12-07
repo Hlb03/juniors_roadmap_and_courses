@@ -19,7 +19,6 @@ public interface UdemyCoursesClient {
     @GetMapping(value = "courses/{courseId}", produces = "application/json")
     DetailedCourseInfo getCertainCourseInfo(@PathVariable(name = "courseId") String courseId, @RequestParam("fields[course]") String requiredFields);
 
-    //TODO: verify whether appropriate fields are returned (mapping has done correctly)
     @GetMapping(value = "pricing")
     GeneralDiscountCourseInfo getCourseDiscountPrice(@RequestParam("course_ids") String courseIds);
 
