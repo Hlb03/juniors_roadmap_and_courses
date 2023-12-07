@@ -2,6 +2,7 @@ package com.course_info.udemy_courses_info.services.implementations;
 
 import com.course_info.udemy_courses_info.client.UdemyCoursesClient;
 import com.course_info.udemy_courses_info.entity.*;
+import com.course_info.udemy_courses_info.exceptions.NoSuchCourseException;
 import com.course_info.udemy_courses_info.services.CoursesInfoService;
 import com.course_info.udemy_courses_info.utils.BearerTokenCreation;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,13 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
         return udemyClient.getCertainCourseInfo(courseId, allCoursesFields);
     }
 
-    //TODO: finish method implementation -> should return discounted price for certain course
     @Override
-    public GeneralDiscountCourseInfo getCourseDiscountedPrice(String courseIds) {
-        log.info("Get discounted course (ids: {}) price ",courseIds);
-        return udemyClient.getCourseDiscountPrice(courseIds);
+    public GeneralDiscountCourseInfo getCourseDiscountedPrice(String courseIds) throws NoSuchCourseException {
+        log.info("Get discounted course (ids: {}) price ", courseIds);
+        GeneralDiscountCourseInfo courseDiscountPrice = udemyClient.getCourseDiscountPrice(courseIds);
+        if (courseDiscountPrice.getDiscountInfo().getPrice() == null)
+            throw new NoSuchCourseException("There is no such course with id " + courseIds);
+        return courseDiscountPrice;
     }
 
     @Override
