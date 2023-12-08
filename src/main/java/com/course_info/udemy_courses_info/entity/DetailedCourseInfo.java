@@ -18,7 +18,9 @@ public class DetailedCourseInfo extends Course {
     @JsonAlias({"num_subscribers"})
     @JsonProperty("enrolledStudents")
     private String enrolledStudents;
-    @JsonProperty("visible_instructors")
+
+    @JsonAlias({"visible_instructors"})
+    @JsonProperty("tutors")
     private List<Tutors> tutors;
 
     @JsonProperty("locale")

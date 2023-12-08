@@ -4,9 +4,11 @@
 отримувати список актуальних курсів з Udemy по конкретній темі.
 
 
-
-
 *Даний репозиторій створений для back-end частини.*
+
+
+## Swagger documentation
+    http://localhost:8080/fs2s/swagger/documentation
 
 
 ## Docker instructions
