@@ -8,7 +8,7 @@
 
 
 ## Swagger documentation
-    http://localhost:8080/fs2s/swagger/documentation
+    http://localhost:8080/fs2s/swagger/documentation.html
 
 
 ## Docker instructions
