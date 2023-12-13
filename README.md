@@ -24,5 +24,8 @@
     docker rm *container_name
 Видалити контейнер за назвою
 
+	docker images
+Переглянути список всіх імеджів (образів)
+
     docker rmi *image_name
 Видалити образ за його назвою
