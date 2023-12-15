@@ -1,5 +1,6 @@
-package com.course_info.udemy_courses_info.entity;
+package com.course_info.udemy_courses_info.entity.detailed_course;
 
+import com.course_info.udemy_courses_info.entity.courses.Course;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -16,11 +17,9 @@ public class DetailedCourseInfo extends Course {
     private String url;
     private String localeTitle;
     @JsonAlias({"num_subscribers"})
-    @JsonProperty("enrolledStudents")
     private String enrolledStudents;
 
     @JsonAlias({"visible_instructors"})
-    @JsonProperty("tutors")
     private List<Tutors> tutors;
 
     @JsonProperty("locale")

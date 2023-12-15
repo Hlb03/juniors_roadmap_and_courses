@@ -1,11 +1,8 @@
-package com.course_info.udemy_courses_info.entity;
+package com.course_info.udemy_courses_info.entity.courses;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
-import java.util.List;
-import java.util.Map;
 
 @Data
 public class Course {
@@ -14,7 +11,7 @@ public class Course {
     private String price;
     @JsonProperty("avgRate")
     @JsonAlias({"avg_rating"})
-    private Double avgRate;
+    private String avgRate;
     @JsonProperty("imageUrl_125H")
     @JsonAlias({"image_125_H"})
     private String imageUrl_125H;

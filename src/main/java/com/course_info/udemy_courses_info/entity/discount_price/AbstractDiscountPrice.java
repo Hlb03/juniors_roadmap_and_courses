@@ -1,14 +1,16 @@
 package com.course_info.udemy_courses_info.entity.discount_price;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public abstract class AbstractDiscountPrice {
-
-    private String amount;
-    private String currency;
-    private String price_string;
+    @JsonAlias({"price_string"})
+    private String price;
 }
