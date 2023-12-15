@@ -1,20 +1,26 @@
 package com.course_info.udemy_courses_info.services;
 
-import com.course_info.udemy_courses_info.entity.BunchOfCoursesRequest;
-import com.course_info.udemy_courses_info.entity.Course;
-import com.course_info.udemy_courses_info.entity.DetailedCourseInfo;
-import com.course_info.udemy_courses_info.entity.GeneralDiscountCourseInfo;
+import com.course_info.udemy_courses_info.dto.DetailedCourseDTO;
+import com.course_info.udemy_courses_info.dto.DiscountPriceDTO;
+import com.course_info.udemy_courses_info.dto.ReviewDTO;
+import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
+import com.course_info.udemy_courses_info.entity.courses.Course;
+import com.course_info.udemy_courses_info.entity.lectures.Lecture;
 import com.course_info.udemy_courses_info.exceptions.NoSuchCourseException;
 
 import java.util.List;
 
 public interface CoursesInfoService {
 
-    DetailedCourseInfo courseInfo(String courseId);
+    DetailedCourseDTO courseInfo(String courseId);
 
-    GeneralDiscountCourseInfo getCourseDiscountedPrice(String courseIds) throws NoSuchCourseException;
+    List<ReviewDTO> obtainCourseReviews(String courseId);
+
+    List<Lecture> getCourseLecture(String courseId);
+
+    DiscountPriceDTO getCourseDiscountedPrice(String courseIds) throws NoSuchCourseException;
 
     List<Course> getHotPropositions();
 
-    BunchOfCoursesRequest getCoursesForCertainArea(String areaName);
+    BunchOfCourses getCoursesForCertainArea(String areaName);
 }

@@ -1,11 +1,13 @@
 package com.course_info.udemy_courses_info.controller;
 
-import com.course_info.udemy_courses_info.entity.BunchOfCoursesRequest;
-import com.course_info.udemy_courses_info.entity.Course;
-import com.course_info.udemy_courses_info.entity.DetailedCourseInfo;
-import com.course_info.udemy_courses_info.entity.GeneralDiscountCourseInfo;
-import com.course_info.udemy_courses_info.exceptions.representation.ExceptionMessage;
+import com.course_info.udemy_courses_info.dto.DetailedCourseDTO;
+import com.course_info.udemy_courses_info.dto.DiscountPriceDTO;
+import com.course_info.udemy_courses_info.dto.ReviewDTO;
+import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
+import com.course_info.udemy_courses_info.entity.courses.Course;
+import com.course_info.udemy_courses_info.entity.lectures.Lecture;
 import com.course_info.udemy_courses_info.exceptions.NoSuchCourseException;
+import com.course_info.udemy_courses_info.exceptions.representation.ExceptionMessage;
 import com.course_info.udemy_courses_info.services.CoursesInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,8 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@CrossOrigin("localhost:3000")
-@Tag(name = "Various course info", description = "FS2S implementation that provides certain information about Udemy courses")
+@CrossOrigin("localhost:5175")
+@Tag(name = "API dedicated to Udemy courses", description = "FS2S provides multiple methods to obtain info dedicated to Udemy courses")
 @RestController
 @RequestMapping("/roadmaps/courses-info")
 @RequiredArgsConstructor
@@ -37,27 +39,53 @@ public class CoursesInfoController {
             description = "Obtain full information about certain course by providing its identifier"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = DetailedCourseInfo.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = DetailedCourseDTO.class), mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
     })
     @GetMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    public DetailedCourseInfo certainCourseInfo(
+    public DetailedCourseDTO certainCourseInfo(
             @Parameter(description = "Course unique ID") @PathVariable String courseId
     ) {
         return coursesInfoService.courseInfo(courseId);
     }
 
+    @Operation(
+            summary = "Reviews on course by its ID",
+            description = "Obtain comments that have a content (text review) dedicated to a certain course"
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = GeneralDiscountCourseInfo.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDTO.class)), mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
     })
+    @GetMapping("/{courseId}/reviews")
+    public List<ReviewDTO> obtainCourseComments(@Parameter(description = "Unique course id") @PathVariable String courseId) {
+        return coursesInfoService.obtainCourseReviews(courseId);
+    }
+
+    @Operation(
+            summary = "Get a few course lectures (maximum 12)",
+            description = "Returns selected course activities, especially lectures"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Lecture.class)), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
+    })
+    @GetMapping("/{courseId}/lectures")
+    public List<Lecture> obtainCourseLectures(@Parameter(description = "Unique course id") @PathVariable String courseId) {
+        return coursesInfoService.getCourseLecture(courseId);
+    }
+
     @Operation(
             summary = "Get price with discount by course ID",
             description = "Returns both discounted and regular course price"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = DiscountPriceDTO.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
+    })
     @GetMapping("/{courseId}/discount")
-    public GeneralDiscountCourseInfo discountedCoursePrice(
+    public DiscountPriceDTO discountedCoursePrice(
             @Parameter(description = "Unique course id") @PathVariable String courseId
     ) {
         try {
@@ -67,14 +95,14 @@ public class CoursesInfoController {
         }
     }
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Course.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "500", description = "Happens if UdemyAPI is invalid or expired. Another case - UdemyAPI servers are temporarily unavailable", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
-    })
     @Operation(
             summary = "Get 10 popular courses from Udemy",
             description = "Returns courses description with limited information"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Course.class)), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Happens if UdemyAPI is invalid or expired. Another case - UdemyAPI servers are temporarily unavailable", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
+    })
     @GetMapping("/hot")
     @ResponseStatus(HttpStatus.OK)
     public List<Course> getHotCourses() {
@@ -82,17 +110,17 @@ public class CoursesInfoController {
     }
 
     // TODO: remove all special url-associated symbols from IT area (e.g. '/' in UI/UX)  Do it on front-end!
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BunchOfCoursesRequest.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "500", description = "Happens if UdemyAPI is invalid or expired. Another case - UdemyAPI servers are temporarily unavailable", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
-    })
     @Operation(
             summary = "Returns plenty of courses specialized on certain area",
             description = "According to a user input returns all courses from Udemy that are connected to specific professional field"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BunchOfCourses.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Happens if UdemyAPI is invalid or expired. Another case - UdemyAPI servers are temporarily unavailable", content = {@Content(schema = @Schema(implementation = ExceptionMessage.class), mediaType = "application/json")})
+    })
     @GetMapping("/search/{certainArea}")
     @ResponseStatus(HttpStatus.OK)
-    public BunchOfCoursesRequest getCertainDirectionCourses(
+    public BunchOfCourses getCertainDirectionCourses(
             @Parameter(description = "IT area name (e.g. Java, Python, UI/UX etc.)") @PathVariable String certainArea) {
         return coursesInfoService.getCoursesForCertainArea(certainArea);
     }
