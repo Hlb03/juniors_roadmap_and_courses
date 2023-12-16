@@ -3,6 +3,6 @@ version: '3'
 services:
   fs2s-backend:
     container_name: fs2s-back
-    image: hlb03/fs2s:v1.1.3
+    image: hlb03/fs2s:v1.1.4
     ports:
       - '8080:8080'
