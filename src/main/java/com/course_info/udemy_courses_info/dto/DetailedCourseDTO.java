@@ -14,7 +14,9 @@ public record DetailedCourseDTO(
         String locale,
         String avgRate,
         String enrolledStudents,
+        String lecturesAmount,
         String imageUrl_125H,
         String imageUrl_240x135,
         String imageUrl_480x270,
+        String description,
         List<String> lecturers) {}

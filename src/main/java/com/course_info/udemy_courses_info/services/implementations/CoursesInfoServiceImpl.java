@@ -29,7 +29,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     private final BearerTokenCreation tokenCreation;
 
     private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270";
-    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,headline,url,locale,visible_instructors,num_subscribers";
+    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_lectures";
     private final String REQUIRED_FIELDS_FOR_LECTURE = "_class,title,created,description,content_summary";
 
     // TODO: course which r not available now (e.g. id 533680) r throwing 403 status and 500 as a result
@@ -42,6 +42,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .title(courseInfo.getTitle())
                 .price(courseInfo.getPrice())
                 .headline(courseInfo.getHeadline())
+                .description(courseInfo.getDescription())
                 .avgRate(courseInfo.getAvgRate())
                 .imageUrl_125H(courseInfo.getImageUrl_125H())
                 .imageUrl_240x135(courseInfo.getImageUrl_240x135())
@@ -49,6 +50,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .courseURL(courseInfo.getUrl())
                 .locale(courseInfo.getLocaleTitle())
                 .enrolledStudents(courseInfo.getEnrolledStudents())
+                .lecturesAmount(courseInfo.getLecturesAmount())
                 .lecturers(
                         courseInfo.getTutors()
                                 .stream()
