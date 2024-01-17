@@ -1,5 +1,6 @@
 package com.course_info.udemy_courses_info.dto;
 
+import com.course_info.udemy_courses_info.entity.detailed_course.Video;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,10 +14,16 @@ public record DetailedCourseDTO(
         String courseURL,
         String locale,
         String avgRate,
+        String reviews,
+        String courseLevel,
+        String lecturesDuration,
         String enrolledStudents,
-        String lecturesAmount,
+        String quizzesAmount,
+        Boolean hasCertificate,
         String imageUrl_125H,
         String imageUrl_240x135,
         String imageUrl_480x270,
         String description,
+        List<Video> videos,
+        List<String> requirements,
         List<String> lecturers) {}

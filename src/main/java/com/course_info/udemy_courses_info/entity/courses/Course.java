@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Course {
     private Long id;
@@ -21,4 +23,6 @@ public class Course {
     @JsonProperty("imageUrl_480x270")
     @JsonAlias({"image_480x270"})
     private String imageUrl_480x270;
+    @JsonAlias({"caption_languages"})
+    private List<String> courseLanguages;
 }

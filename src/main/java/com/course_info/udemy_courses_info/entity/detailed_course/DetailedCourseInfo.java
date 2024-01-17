@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Data
@@ -19,12 +20,24 @@ public class DetailedCourseInfo extends Course {
     @JsonAlias({"num_subscribers"})
     private String enrolledStudents;
 
-    @JsonAlias({"num_lectures"})
-    private String lecturesAmount;
+    @JsonAlias({"num_reviews"})
+    private String reviewsNumber;
+    @JsonAlias({"num_quizzes"})
+    private String quizzesAmount;
     private String description;
+    @JsonAlias({"requirements_data"})
+    private Requirements requirements;
+    @JsonAlias({"instructional_level"})
+    private String instructionalLevel;
 
+    @JsonAlias({"has_certificate"})
+    private Boolean certificatePresence;
+    @JsonAlias({"content_info_short"})
+    private String lecturesDuration;
     @JsonAlias({"visible_instructors"})
     private List<Tutors> tutors;
+    @JsonAlias({"promo_asset"})
+    private PromoAssets promo;
 
     @JsonProperty("locale")
     private void mapNestedLocale(Map<String, Object> locale) {
