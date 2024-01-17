@@ -28,15 +28,17 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     private final UdemyCoursesClient udemyClient;
     private final BearerTokenCreation tokenCreation;
 
-    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270";
-    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_lectures";
+    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,caption_languages";
+    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,num_reviews,price,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_quizzes,instructional_level,content_info_short,has_certificate,requirements_data,promo_asset";
     private final String REQUIRED_FIELDS_FOR_LECTURE = "_class,title,created,description,content_summary";
 
     // TODO: course which r not available now (e.g. id 533680) r throwing 403 status and 500 as a result
+    // TODO: videos could be null. Inspect how to omit NPE
     @Override
     public DetailedCourseDTO courseInfo(String courseId) {
         log.info("Gaining info about course with id " + courseId);
         DetailedCourseInfo courseInfo = udemyClient.getCertainCourseInfo(courseId, REQUIRED_COURSE_FIELDS);
+        log.info("Videos {}", courseInfo.getPromo());
         return DetailedCourseDTO.builder()
                 .id(courseInfo.getId())
                 .title(courseInfo.getTitle())
@@ -44,13 +46,19 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .headline(courseInfo.getHeadline())
                 .description(courseInfo.getDescription())
                 .avgRate(courseInfo.getAvgRate())
+                .reviews(courseInfo.getReviewsNumber())
+                .hasCertificate(courseInfo.getCertificatePresence())
+                .courseLevel(courseInfo.getInstructionalLevel())
+                .lecturesDuration(courseInfo.getLecturesDuration())
                 .imageUrl_125H(courseInfo.getImageUrl_125H())
                 .imageUrl_240x135(courseInfo.getImageUrl_240x135())
                 .imageUrl_480x270(courseInfo.getImageUrl_480x270())
                 .courseURL(courseInfo.getUrl())
                 .locale(courseInfo.getLocaleTitle())
                 .enrolledStudents(courseInfo.getEnrolledStudents())
-                .lecturesAmount(courseInfo.getLecturesAmount())
+                .quizzesAmount(courseInfo.getQuizzesAmount())
+                .videos((courseInfo.getPromo() != null) ? courseInfo.getPromo().promoVideo().videos() : List.of())
+                .requirements(courseInfo.getRequirements().items())
                 .lecturers(
                         courseInfo.getTutors()
                                 .stream()
@@ -60,7 +68,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .build();
     }
 
-    // TODO: Check whether some amount limitation r required (6 is enough)
+    // TODO: inspect whether request size could be optimized
     @Override
     public List<ReviewDTO> obtainCourseReviews(String courseId) {
         log.info("Obtaining course reviews for course with id {}", courseId);
@@ -74,14 +82,19 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                         .createdAt(element.created())
                         .author(element.reviewer().displayName())
                         .build())
+                .limit(3)
                 .toList();
     }
 
+    // TODO: inspect whether request size could be optimized
     @Override
     public List<Lecture> getCourseLecture(String courseId) {
         log.info("Getting lectures for course with id {}", courseId);
         List<Lecture> allCourseActivities = udemyClient.getCourseLectures(courseId, REQUIRED_FIELDS_FOR_LECTURE).getLectures();
-        List<Lecture> onlyLecturesList = allCourseActivities.stream().filter(activity -> activity.type().equals("lecture")).toList();
+        List<Lecture> onlyLecturesList = allCourseActivities.stream()
+                                                .filter(activity -> activity.type().equals("lecture"))
+//                .limit(8)
+                .toList();
         log.info("General amount of all activities were {}, but remain {} lectures", allCourseActivities.size(), onlyLecturesList.size());
         return onlyLecturesList;
     }

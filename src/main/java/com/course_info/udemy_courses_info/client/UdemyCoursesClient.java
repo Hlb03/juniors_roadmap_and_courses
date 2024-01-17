@@ -21,10 +21,11 @@ public interface UdemyCoursesClient {
     @GetMapping(value = "courses/{courseId}", produces = "application/json")
     DetailedCourseInfo getCertainCourseInfo(@PathVariable(name = "courseId") String courseId, @RequestParam("fields[course]") String requiredFields);
 
-    //TODO: inspect page size
-    @GetMapping(value = "courses/{courseId}/reviews?page_size=120&page=1", produces = "application/json")
+    //TODO: inspect page size could be less
+    @GetMapping(value = "courses/{courseId}/reviews?page_size=40&page=1", produces = "application/json")
     BunchOfReviews getCourseReviews(@PathVariable(name = "courseId") String courseId);
 
+    // TODO: check after full proj connection whether page_size could be decreased to 10
     @GetMapping("courses/{courseId}/public-curriculum-items?page_size=12")
     BunchOfCourseLectures getCourseLectures(@PathVariable (name = "courseId") String courseId, @RequestParam("fields[lecture]") String requiredFields);
 
