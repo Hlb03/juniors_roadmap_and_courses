@@ -1,8 +1,6 @@
 package com.course_info.udemy_courses_info.controller;
 
-import com.course_info.udemy_courses_info.dto.DetailedCourseDTO;
-import com.course_info.udemy_courses_info.dto.DiscountPriceDTO;
-import com.course_info.udemy_courses_info.dto.ReviewDTO;
+import com.course_info.udemy_courses_info.dto.*;
 import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
 import com.course_info.udemy_courses_info.entity.courses.Course;
 import com.course_info.udemy_courses_info.entity.lectures.Lecture;
@@ -77,8 +75,8 @@ public class CoursesInfoController {
     }
 
     @Operation(
-            summary = "Get price with discount by course ID",
-            description = "Returns both discounted and regular course price"
+            summary = "DEPRECATED. DO NOT USE!!!         Get discountPrice with discount by course ID",
+            description = "Returns both discounted and regular course discountPrice"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = DiscountPriceDTO.class), mediaType = "application/json")}),
@@ -105,7 +103,7 @@ public class CoursesInfoController {
     })
     @GetMapping("/hot")
     @ResponseStatus(HttpStatus.OK)
-    public List<Course> getHotCourses() {
+    public List<CourseDTO> getHotCourses() {
         return coursesInfoService.getHotPropositions();
     }
 
@@ -120,7 +118,7 @@ public class CoursesInfoController {
     })
     @GetMapping("/search/{certainArea}")
     @ResponseStatus(HttpStatus.OK)
-    public BunchOfCourses getCertainDirectionCourses(
+    public CertainAreaCoursesDTO getCertainDirectionCourses(
             @Parameter(description = "IT area name (e.g. Java, Python, UI/UX etc.)") @PathVariable String certainArea) {
         return coursesInfoService.getCoursesForCertainArea(certainArea);
     }

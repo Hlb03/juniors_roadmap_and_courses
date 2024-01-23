@@ -1,10 +1,7 @@
 package com.course_info.udemy_courses_info.services;
 
-import com.course_info.udemy_courses_info.dto.DetailedCourseDTO;
-import com.course_info.udemy_courses_info.dto.DiscountPriceDTO;
-import com.course_info.udemy_courses_info.dto.ReviewDTO;
+import com.course_info.udemy_courses_info.dto.*;
 import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
-import com.course_info.udemy_courses_info.entity.courses.Course;
 import com.course_info.udemy_courses_info.entity.lectures.Lecture;
 import com.course_info.udemy_courses_info.exceptions.NoSuchCourseException;
 
@@ -20,7 +17,7 @@ public interface CoursesInfoService {
 
     DiscountPriceDTO getCourseDiscountedPrice(String courseIds) throws NoSuchCourseException;
 
-    List<Course> getHotPropositions();
+    List<CourseDTO> getHotPropositions();
 
-    BunchOfCourses getCoursesForCertainArea(String areaName);
+    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName);
 }

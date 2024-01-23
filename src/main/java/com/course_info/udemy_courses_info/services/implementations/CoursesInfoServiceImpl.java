@@ -1,9 +1,7 @@
 package com.course_info.udemy_courses_info.services.implementations;
 
 import com.course_info.udemy_courses_info.client.UdemyCoursesClient;
-import com.course_info.udemy_courses_info.dto.DetailedCourseDTO;
-import com.course_info.udemy_courses_info.dto.DiscountPriceDTO;
-import com.course_info.udemy_courses_info.dto.ReviewDTO;
+import com.course_info.udemy_courses_info.dto.*;
 import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
 import com.course_info.udemy_courses_info.entity.courses.Course;
 import com.course_info.udemy_courses_info.entity.detailed_course.DetailedCourseInfo;
@@ -28,8 +26,8 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     private final UdemyCoursesClient udemyClient;
     private final BearerTokenCreation tokenCreation;
 
-    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,caption_languages";
-    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,num_reviews,price,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_quizzes,instructional_level,content_info_short,has_certificate,requirements_data,promo_asset";
+    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,caption_languages,discount,instructional_level";
+    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,num_reviews,price,discount,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_quizzes,instructional_level,content_info_short,has_certificate,requirements_data,promo_asset";
     private final String REQUIRED_FIELDS_FOR_LECTURE = "_class,title,created,description,content_summary";
 
     // TODO: course which r not available now (e.g. id 533680) r throwing 403 status and 500 as a result
@@ -43,6 +41,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .id(courseInfo.getId())
                 .title(courseInfo.getTitle())
                 .price(courseInfo.getPrice())
+                .discountPrice((courseInfo.getDiscount() != null) ? courseInfo.getDiscount().discountPrice().price() : null)
                 .headline(courseInfo.getHeadline())
                 .description(courseInfo.getDescription())
                 .avgRate(courseInfo.getAvgRate())
@@ -92,8 +91,8 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
         log.info("Getting lectures for course with id {}", courseId);
         List<Lecture> allCourseActivities = udemyClient.getCourseLectures(courseId, REQUIRED_FIELDS_FOR_LECTURE).getLectures();
         List<Lecture> onlyLecturesList = allCourseActivities.stream()
-                                                .filter(activity -> activity.type().equals("lecture"))
-//                .limit(8)
+                .filter(activity -> activity.type().equals("lecture"))
+                .limit(8)
                 .toList();
         log.info("General amount of all activities were {}, but remain {} lectures", allCourseActivities.size(), onlyLecturesList.size());
         return onlyLecturesList;
@@ -101,7 +100,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
 
     @Override
     public DiscountPriceDTO getCourseDiscountedPrice(String courseIds) throws NoSuchCourseException {
-        log.info("Get discounted course (ids: {}) price ", courseIds);
+        log.info("Get discounted course (ids: {}) discountPrice ", courseIds);
         GeneralDiscountCourseInfo courseDiscountPrice = udemyClient.getCourseDiscountPrice(courseIds);
         if (courseDiscountPrice.getDiscountInfo().getPrice() == null) {
             log.info("There is no such course with id {} due to the discount request", courseIds);
@@ -114,14 +113,39 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     }
 
     @Override
-    public List<Course> getHotPropositions() {
+    public List<CourseDTO> getHotPropositions() {
         log.info("Getting most popular courses");
-        return udemyClient.getBunchOfCourses(tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS).getCourses();
+        return mapCourseListWithDTOList(
+                udemyClient.getBunchOfCourses(tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS)
+                        .getCourses()
+        );
     }
 
     @Override
-    public BunchOfCourses getCoursesForCertainArea(String areaName) {
+    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName) {
         log.info("Get courses dedicated to {}", areaName);
-        return udemyClient.getSpecifiedAreaCourses(areaName, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+        return CertainAreaCoursesDTO.builder()
+                .dataAmount(bunchOfCourses.getDataAmount())
+                .courses(mapCourseListWithDTOList(bunchOfCourses.getCourses()))
+                .build();
+    }
+
+    private List<CourseDTO> mapCourseListWithDTOList(List<Course> courses) {
+        return courses.stream()
+                .map(crs -> CourseDTO
+                        .builder()
+                        .id(crs.getId())
+                        .title(crs.getTitle())
+                        .price(crs.getPrice())
+                        .discount((crs.getDiscount() != null) ? crs.getDiscount().discountPrice().price() : null)
+                        .courseLevel(crs.getInstructionalLevel())
+                        .avgRate(crs.getAvgRate())
+                        .imageUrl_125H(crs.getImageUrl_125H())
+                        .imageUrl_240x135(crs.getImageUrl_240x135())
+                        .imageUrl_480x270(crs.getImageUrl_480x270())
+                        .courseLanguages(crs.getCourseLanguages())
+                        .build())
+                .toList();
     }
 }
