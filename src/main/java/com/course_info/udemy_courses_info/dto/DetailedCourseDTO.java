@@ -10,6 +10,7 @@ public record DetailedCourseDTO(
         Long id,
         String title,
         String price,
+        String discountPrice,
         String headline,
         String courseURL,
         String locale,

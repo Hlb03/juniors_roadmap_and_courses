@@ -1,6 +1,7 @@
 package com.course_info.udemy_courses_info.entity.detailed_course;
 
 import com.course_info.udemy_courses_info.entity.courses.Course;
+import com.course_info.udemy_courses_info.entity.discount_price.Discount;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -14,6 +15,8 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DetailedCourseInfo extends Course {
+    @JsonAlias({"discount"})
+    private Discount discount;
     private String headline;
     private String url;
     private String localeTitle;

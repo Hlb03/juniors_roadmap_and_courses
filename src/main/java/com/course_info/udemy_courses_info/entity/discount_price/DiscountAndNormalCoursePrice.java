@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 
 public record DiscountAndNormalCoursePrice(
 
-        @JsonAlias({"price"})
+        @JsonAlias({"discountPrice"})
         NormalPrice normalPrice,
         @JsonAlias({"list_price"})
         DiscountedPrice discountedPrice
