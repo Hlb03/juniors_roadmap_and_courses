@@ -22,7 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173*")
+//TODO: inspect whether cors could optimized
+@CrossOrigin(origins = "*")
 @Tag(name = "API dedicated to Udemy courses", description = "FS2S provides multiple methods to obtain info dedicated to Udemy courses")
 @RestController
 @RequestMapping("/roadmaps/courses-info")
