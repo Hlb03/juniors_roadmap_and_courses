@@ -122,9 +122,9 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     }
 
     @Override
-    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName) {
-        log.info("Get courses dedicated to {}", areaName);
-        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page) {
+        log.info("Get courses dedicated to {} for the {} page", areaName, page);
+        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, page, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
         return CertainAreaCoursesDTO.builder()
                 .dataAmount(bunchOfCourses.getDataAmount())
                 .courses(mapCourseListWithDTOList(bunchOfCourses.getCourses()))

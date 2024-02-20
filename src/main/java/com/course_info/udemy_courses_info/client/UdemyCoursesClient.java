@@ -36,10 +36,10 @@ public interface UdemyCoursesClient {
     @GetMapping(value = "courses?page_size=10", produces = "application/json")
     BunchOfCourses getBunchOfCourses(@RequestHeader("Authorization") String authorizationToken, @RequestParam("fields[course]") String requiredFields);
 
-    //TODO: figure out data amount for one page
-    @GetMapping(value = "courses?search={areaName}", produces = "application/json")
+    @GetMapping(value = "courses?search={areaName}&page_size=5&page={pageNumber}", produces = "application/json")
     BunchOfCourses getSpecifiedAreaCourses(
             @PathVariable(name = "areaName") String areaName,
+            @PathVariable(name = "pageNumber") Integer pageNumber,
             @RequestHeader("Authorization") String authorizationToken,
             @RequestParam("fields[course]") String requiredFields
     );

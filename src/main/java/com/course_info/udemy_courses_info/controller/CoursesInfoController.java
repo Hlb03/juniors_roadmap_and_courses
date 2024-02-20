@@ -15,8 +15,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +27,7 @@ import java.util.List;
 //TODO: inspect whether cors could optimized
 @CrossOrigin
 @Tag(name = "API dedicated to Udemy courses", description = "FS2S provides multiple methods to obtain info dedicated to Udemy courses")
+@Validated
 @RestController
 @RequestMapping("/roadmaps/courses-info")
 @RequiredArgsConstructor
@@ -120,7 +123,10 @@ public class CoursesInfoController {
     @GetMapping("/search/{certainArea}")
     @ResponseStatus(HttpStatus.OK)
     public CertainAreaCoursesDTO getCertainDirectionCourses(
-            @Parameter(description = "IT area name (e.g. Java, Python, UI/UX etc.)") @PathVariable String certainArea) {
-        return coursesInfoService.getCoursesForCertainArea(certainArea);
+            @Parameter(description = "IT area name (e.g. Java, Python, UI/UX etc.)")
+                            @PathVariable String certainArea,
+            @Parameter(description = "Describes page number for paging implementation")
+                            @RequestParam(name = "page", defaultValue = "1", required = false) @Min(value = 1, message = "Page should be at least equal to 1") Integer page) {
+        return coursesInfoService.getCoursesForCertainArea(certainArea, page);
     }
 }

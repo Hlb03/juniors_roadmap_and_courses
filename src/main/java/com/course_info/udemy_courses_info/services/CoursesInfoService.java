@@ -19,5 +19,5 @@ public interface CoursesInfoService {
 
     List<CourseDTO> getHotPropositions();
 
-    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName);
+    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page);
 }
