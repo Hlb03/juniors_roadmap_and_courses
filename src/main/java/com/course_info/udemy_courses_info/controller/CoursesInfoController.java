@@ -24,7 +24,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-//TODO: inspect whether cors could optimized
 @CrossOrigin
 @Tag(name = "API dedicated to Udemy courses", description = "FS2S provides multiple methods to obtain info dedicated to Udemy courses")
 @Validated
@@ -126,7 +125,15 @@ public class CoursesInfoController {
             @Parameter(description = "IT area name (e.g. Java, Python, UI/UX etc.)")
                             @PathVariable String certainArea,
             @Parameter(description = "Describes page number for paging implementation")
-                            @RequestParam(name = "page", defaultValue = "1", required = false) @Min(value = 1, message = "Page should be at least equal to 1") Integer page) {
-        return coursesInfoService.getCoursesForCertainArea(certainArea, page);
+                            @RequestParam(name = "page", defaultValue = "1", required = false) @Min(value = 1, message = "Page should be at least equal to 1") Integer page,
+            @Parameter(description = "Filter param dedicated to course levels")
+                            @RequestParam(name = "level", required = false) String level,
+            @Parameter(description = "Minimum accepted course rate")
+                            @RequestParam(name = "rate", required = false) String rate,
+            @Parameter(description = "Order of displaying course")
+                            @RequestParam(name = "order", required = false) String orderType,
+            @Parameter(description = "Course language")
+                            @RequestParam(name = "lang", required = false) String language) {
+        return coursesInfoService.getCoursesForCertainArea(certainArea, page, level, rate, orderType, language);
     }
 }

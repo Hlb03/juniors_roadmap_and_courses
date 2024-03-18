@@ -1,7 +1,6 @@
 package com.course_info.udemy_courses_info.services;
 
 import com.course_info.udemy_courses_info.dto.*;
-import com.course_info.udemy_courses_info.entity.courses.BunchOfCourses;
 import com.course_info.udemy_courses_info.entity.lectures.Lecture;
 import com.course_info.udemy_courses_info.exceptions.NoSuchCourseException;
 
@@ -19,5 +18,5 @@ public interface CoursesInfoService {
 
     List<CourseDTO> getHotPropositions();
 
-    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page);
+    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language);
 }

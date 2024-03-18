@@ -31,12 +31,12 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     private final String REQUIRED_FIELDS_FOR_LECTURE = "_class,title,created,description,content_summary";
 
     // TODO: course which r not available now (e.g. id 533680) r throwing 403 status and 500 as a result
-    // TODO: videos could be null. Inspect how to omit NPE
     @Override
     public DetailedCourseDTO courseInfo(String courseId) {
         log.info("Gaining info about course with id " + courseId);
         DetailedCourseInfo courseInfo = udemyClient.getCertainCourseInfo(courseId, REQUIRED_COURSE_FIELDS);
         log.info("Videos {}", courseInfo.getPromo());
+        log.info("Currency example: " + courseInfo.getPrice());
         return DetailedCourseDTO.builder()
                 .id(courseInfo.getId())
                 .title(courseInfo.getTitle())
@@ -122,9 +122,11 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     }
 
     @Override
-    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page) {
+    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language) {
         log.info("Get courses dedicated to {} for the {} page", areaName, page);
-        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, page, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+
+        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, page, level, rate, orderType, language, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+        log.info("Filter params are: level - {}; course rate - {}; ordering type - {}; language - {}", level, rate, orderType, language);
         return CertainAreaCoursesDTO.builder()
                 .dataAmount(bunchOfCourses.getDataAmount())
                 .courses(mapCourseListWithDTOList(bunchOfCourses.getCourses()))
