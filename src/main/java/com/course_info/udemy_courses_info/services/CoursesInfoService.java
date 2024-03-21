@@ -18,5 +18,5 @@ public interface CoursesInfoService {
 
     List<CourseDTO> getHotPropositions();
 
-    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language);
+    CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language, String priceType);
 }

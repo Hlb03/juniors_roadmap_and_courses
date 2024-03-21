@@ -133,7 +133,9 @@ public class CoursesInfoController {
             @Parameter(description = "Order of displaying course")
                             @RequestParam(name = "order", required = false) String orderType,
             @Parameter(description = "Course language")
-                            @RequestParam(name = "lang", required = false) String language) {
-        return coursesInfoService.getCoursesForCertainArea(certainArea, page, level, rate, orderType, language);
+                            @RequestParam(name = "lang", required = false) String language,
+            @Parameter(description = "Whether courses are free or paid")
+                            @RequestParam(name = "price", required = false) String priceType) {
+        return coursesInfoService.getCoursesForCertainArea(certainArea, page, level, rate, orderType, language, priceType);
     }
 }

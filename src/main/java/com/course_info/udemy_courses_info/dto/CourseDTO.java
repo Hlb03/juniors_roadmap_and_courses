@@ -10,6 +10,7 @@ public record CourseDTO(
         String courseLevel,
         String price,
         String discount,
+        String createdAt,
         String avgRate,
         String imageUrl_125H,
         String imageUrl_240x135,

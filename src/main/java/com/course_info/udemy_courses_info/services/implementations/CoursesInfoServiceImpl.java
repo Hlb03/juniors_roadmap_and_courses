@@ -26,8 +26,8 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     private final UdemyCoursesClient udemyClient;
     private final BearerTokenCreation tokenCreation;
 
-    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,image_125_H,image_240x135,image_480x270,caption_languages,discount,instructional_level";
-    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,num_reviews,price,discount,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_quizzes,instructional_level,content_info_short,has_certificate,requirements_data,promo_asset";
+    private final String LIMITED_COURSE_FIELDS = "id,title,avg_rating,price,created,image_125_H,image_240x135,image_480x270,caption_languages,discount,instructional_level";
+    private final String REQUIRED_COURSE_FIELDS = "id,title,avg_rating,num_reviews,price,discount,created,image_125_H,image_240x135,image_480x270,headline,description,url,locale,visible_instructors,num_subscribers,num_quizzes,instructional_level,content_info_short,has_certificate,requirements_data,promo_asset";
     private final String REQUIRED_FIELDS_FOR_LECTURE = "_class,title,created,description,content_summary";
 
     // TODO: course which r not available now (e.g. id 533680) r throwing 403 status and 500 as a result
@@ -42,6 +42,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                 .title(courseInfo.getTitle())
                 .price(courseInfo.getPrice())
                 .discountPrice((courseInfo.getDiscount() != null) ? courseInfo.getDiscount().discountPrice().price() : null)
+                .createdAt(courseInfo.getCreatedAt())
                 .headline(courseInfo.getHeadline())
                 .description(courseInfo.getDescription())
                 .avgRate(courseInfo.getAvgRate())
@@ -122,11 +123,11 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
     }
 
     @Override
-    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language) {
+    public CertainAreaCoursesDTO getCoursesForCertainArea(String areaName, Integer page, String level, String rate, String orderType, String language, String priceType) {
         log.info("Get courses dedicated to {} for the {} page", areaName, page);
 
-        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, page, level, rate, orderType, language, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
-        log.info("Filter params are: level - {}; course rate - {}; ordering type - {}; language - {}", level, rate, orderType, language);
+        BunchOfCourses bunchOfCourses = udemyClient.getSpecifiedAreaCourses(areaName, page, level, rate, orderType, language, priceType, tokenCreation.getEncodedToken(), LIMITED_COURSE_FIELDS);
+        log.info("Filter params are: level - {}; course rate - {}; ordering type - {}; language - {}; price type - {}", level, rate, orderType, language, priceType);
         return CertainAreaCoursesDTO.builder()
                 .dataAmount(bunchOfCourses.getDataAmount())
                 .courses(mapCourseListWithDTOList(bunchOfCourses.getCourses()))
@@ -141,6 +142,7 @@ public class CoursesInfoServiceImpl implements CoursesInfoService {
                         .title(crs.getTitle())
                         .price(crs.getPrice())
                         .discount((crs.getDiscount() != null) ? crs.getDiscount().discountPrice().price() : null)
+                        .createdAt(crs.getCreatedAt())
                         .courseLevel(crs.getInstructionalLevel())
                         .avgRate(crs.getAvgRate())
                         .imageUrl_125H(crs.getImageUrl_125H())

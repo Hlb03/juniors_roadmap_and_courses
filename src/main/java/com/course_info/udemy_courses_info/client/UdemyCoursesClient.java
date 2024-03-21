@@ -36,7 +36,7 @@ public interface UdemyCoursesClient {
     @GetMapping(value = "courses?page_size=10", produces = "application/json")
     BunchOfCourses getBunchOfCourses(@RequestHeader("Authorization") String authorizationToken, @RequestParam("fields[course]") String requiredFields);
 
-    @GetMapping(value = "courses?search={areaName}&page_size=7&page={pageNumber}&instructional_level={level}&ratings={courseRate}&ordering={orderingType}&language={courseLang}", produces = "application/json")
+    @GetMapping(value = "courses?search={areaName}&page_size=7&page={pageNumber}&instructional_level={level}&ratings={courseRate}&ordering={orderingType}&language={courseLang}&price={priceType}", produces = "application/json")
     BunchOfCourses getSpecifiedAreaCourses(
             @PathVariable(name = "areaName") String areaName,
             @PathVariable(name = "pageNumber") Integer pageNumber,
@@ -44,6 +44,7 @@ public interface UdemyCoursesClient {
             @PathVariable(name = "courseRate") String courseRate,
             @PathVariable(name = "orderingType") String orderingType,
             @PathVariable(name = "courseLang") String courseLang,
+            @PathVariable(name = "priceType") String priceType,
             @RequestHeader("Authorization") String authorizationToken,
             @RequestParam("fields[course]") String requiredFields
     );

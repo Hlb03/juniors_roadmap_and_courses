@@ -13,6 +13,8 @@ public class Course {
     private String price;
     @JsonAlias({"discount"})
     private Discount discount;
+    @JsonAlias({"created"})
+    private String createdAt; // TODO: check whether it's required only for detailed info
     @JsonAlias({"instructional_level"})
     private String instructionalLevel;
     @JsonAlias({"avg_rating"})
